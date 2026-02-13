@@ -8,10 +8,10 @@ import MdArrowBack from "@material-design-icons/svg/filled/arrow_back.svg?compon
 
 import { useApi, useClient } from "../../../client";
 
+import { Show } from "solid-js";
 import { FlowTitle } from "./Flow";
 import { setFlowCheckEmail } from "./FlowCheck";
 import { Fields, Form } from "./Form";
-import { Show } from "solid-js";
 
 /**
  * Flow for creating a new account
@@ -35,7 +35,7 @@ export default function FlowCreate() {
       email,
       password,
       captcha,
-      ...(invite ? { invite } : {})
+      ...(invite ? { invite } : {}),
     });
 
     // FIXME: should tell client if email was sent
