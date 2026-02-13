@@ -136,33 +136,31 @@ class Lifecycle {
         this.#controller.state.notifications.isChannelMuted(channel),
     });
 
-    if (!this.client.configuration) {
-      this.client.configuration = {
-        revolt: String(),
-        app: String(),
-        build: {} as never,
-        features: {
-          autumn: {
-            enabled: true,
-            url: CONFIGURATION.DEFAULT_MEDIA_URL,
-          },
-          january: {
-            enabled: true,
-            url: CONFIGURATION.DEFAULT_PROXY_URL,
-          },
-          captcha: {} as never,
-          email: true,
-          invite_only: false,
-          livekit: {
-            enabled: false,
-            nodes: [],
-          },
+    this.client.configuration = {
+      revolt: String(),
+      app: String(),
+      build: {} as never,
+      features: {
+        autumn: {
+          enabled: true,
+          url: CONFIGURATION.DEFAULT_MEDIA_URL,
         },
-        vapid: String(),
-        ws: CONFIGURATION.DEFAULT_WS_URL,
-      };
-    }
-    
+        january: {
+          enabled: true,
+          url: CONFIGURATION.DEFAULT_PROXY_URL,
+        },
+        captcha: {} as never,
+        email: true,
+        invite_only: false,
+        livekit: {
+          enabled: false,
+          nodes: [],
+        },
+      },
+      vapid: String(),
+      ws: CONFIGURATION.DEFAULT_WS_URL,
+    };
+
     this.client.events.on("state", this.onState);
     this.client.on("ready", this.onReady);
     this.client.on("policyChanges", this.onPolicyChanges);
