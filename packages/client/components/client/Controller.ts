@@ -461,6 +461,7 @@ export default class ClientController {
     this.selectUsername = this.selectUsername.bind(this);
     this.isLoggedIn = this.isLoggedIn.bind(this);
     this.isError = this.isError.bind(this);
+    this.inviteOnly = this.inviteOnly.bind(this);
 
     const session = state.auth.getSession();
     if (session) {
@@ -487,6 +488,10 @@ export default class ClientController {
 
   isError() {
     return this.lifecycle.state() === State.Error;
+  }
+
+  inviteOnly() {
+    return this.lifecycle.client.configuration?.features?.invite_only;
   }
 
   /**

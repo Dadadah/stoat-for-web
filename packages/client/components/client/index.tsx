@@ -81,7 +81,7 @@ export function ClientContext(props: { state: State; children: JSXElement }) {
  * @returns Lifecycle information
  */
 export function useClientLifecycle() {
-  const { login, logout, selectUsername, lifecycle, isLoggedIn, isError } =
+  const { login, logout, selectUsername, lifecycle, isLoggedIn, isError, inviteOnly } =
     useContext(clientContext);
 
   return {
@@ -91,6 +91,7 @@ export function useClientLifecycle() {
     lifecycle,
     isLoggedIn,
     isError,
+    inviteOnly,
   };
 }
 

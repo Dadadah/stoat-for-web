@@ -6,7 +6,7 @@ import { Button, Row, iconSize } from "@revolt/ui";
 
 import MdArrowBack from "@material-design-icons/svg/filled/arrow_back.svg?component-solid";
 
-import { useApi, useClient } from "../../../client";
+import { useApi, useClientLifecycle } from "../../../client";
 
 import { Show } from "solid-js";
 import { FlowTitle } from "./Flow";
@@ -18,8 +18,8 @@ import { Fields, Form } from "./Form";
  */
 export default function FlowCreate() {
   const api = useApi();
-  const client = useClient();
   const navigate = useNavigate();
+  const { inviteOnly } = useClientLifecycle();
 
   /**
    * Create an account
@@ -54,7 +54,7 @@ export default function FlowCreate() {
       </FlowTitle>
       <Form onSubmit={create} captcha={CONFIGURATION.HCAPTCHA_SITEKEY}>
         <Fields fields={["email", "password"]} />
-        <Show when={client().configuration?.features.invite_only}>
+        <Show when={inviteOnly()}>
           <Fields fields={["invite"]} />
         </Show>
         <Row justify>
