@@ -9,7 +9,7 @@ import { Checkbox2, Column, Text, TextField } from "@revolt/ui";
 /**
  * Available field types
  */
-type Field = "email" | "password" | "new-password" | "log-out" | "username";
+type Field = "email" | "password" | "new-password" | "log-out" | "username" | "invite";
 
 /**
  * Properties to apply to fields
@@ -46,6 +46,12 @@ const useFieldConfiguration = () => {
       autocomplete: "none",
       name: () => t`Username`,
       placeholder: () => t`Enter your preferred username.`,
+    },
+    Invite: {
+      type: "text" as const,
+      autocomplete: "none",
+      name: () => t`Invite Code`,
+      placeholder: () => t`Enter your invite code.`,
     },
   };
 };
