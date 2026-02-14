@@ -41,10 +41,12 @@ export default function FlowCreate() {
     // FIXME: should tell client if email was sent
     //        or if email even needs to be confirmed
 
-    // TODO: log straight in if no email confirmation?
-
-    setFlowCheckEmail(email);
-    navigate("/login/check", { replace: true });
+    if (getClient().configuration?.features.email) {
+      setFlowCheckEmail(email);
+      navigate("/login/check", { replace: true });
+    } else {
+      navigate("/login/auth", { replace: true });
+    }
   }
 
   const isInviteOnly = createMemo(() => {
