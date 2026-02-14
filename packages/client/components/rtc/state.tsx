@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import { RoomContext } from "solid-livekit-components";
 
-import { Room } from "livekit-client";
+import { Room, VideoPresets } from "livekit-client";
 import { Channel } from "stoat.js";
 
 import { useState } from "@revolt/state";
@@ -90,6 +90,9 @@ class Voice {
         deviceId: this.#settings.preferredAudioInputDevice,
         echoCancellation: this.#settings.echoCancellation,
         noiseSuppression: this.#settings.noiseSupression,
+      },
+      videoCaptureDefaults: {
+        resolution: VideoPresets.h720.resolution,
       },
       audioOutput: {
         deviceId: this.#settings.preferredAudioOutputDevice,
