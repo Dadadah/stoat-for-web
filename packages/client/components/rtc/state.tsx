@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import { RoomContext } from "solid-livekit-components";
 
-import { Room, VideoPresets } from "livekit-client";
+import { Room, Track, VideoPresets } from "livekit-client";
 import { KrispNoiseFilter } from "@livekit/krisp-noise-filter";
 
 import { useState } from "@revolt/state";
@@ -90,7 +90,6 @@ class Voice {
         deviceId: this.#settings.preferredAudioInputDevice,
         echoCancellation: this.#settings.echoCancellation,
         noiseSuppression: this.#settings.noiseSupression,
-        processor: KrispNoiseFilter(),
       },
       videoCaptureDefaults: {
         resolution: VideoPresets.h720.resolution,
@@ -116,7 +115,12 @@ class Voice {
           .then((track) => this.#setMicrophone(typeof track !== "undefined"));
     });
 
-    room.addListener("connected", () => this.#setState("CONNECTED"));
+    room.addListener("connected", () => {
+      this.#setState("CONNECTED");
+      if (room.localParticipant.getTrackPublication(Track.Source.Microphone)?.audioTrack) {
+        room.localParticipant.getTrackPublication(Track.Source.Microphone).audioTrack.setProcessor(KrispNoiseFilter());
+      }
+    });
 
     room.addListener("disconnected", () => this.#setState("DISCONNECTED"));
 
