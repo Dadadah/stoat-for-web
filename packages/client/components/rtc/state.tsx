@@ -124,6 +124,8 @@ class Voice {
     await room.connect(auth.url, auth.token, {
       autoSubscribe: false,
     });
+    
+    console.log(room.localParticipant.getTrackPublication(Track.Source.Microphone)?.audioTrack);
     if (room.localParticipant.getTrackPublication(Track.Source.Microphone)?.audioTrack) {
       room.localParticipant.getTrackPublication(Track.Source.Microphone).audioTrack.setProcessor(KrispNoiseFilter());
     }
