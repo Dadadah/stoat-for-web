@@ -110,13 +110,13 @@ class Voice {
       if (this.speakingPermission)
         room.localParticipant
           .setMicrophoneEnabled(true)
-          .then((track) => this.#setMicrophone(typeof track !== "undefined"));
+          .then((track) => {
+            this.#setMicrophone(typeof track !== "undefined");
+            room.localParticipant.getTrackPublication(Track.Source.Microphone)?.audioTrack?.setProcessor(KrispNoiseFilter());
+          });
     });
 
-    room.addListener("connected", () => {
-      this.#setState("CONNECTED");
-      console.log("LOCAL PARTICIPANT: ", room.localParticipant);
-    });
+    room.addListener("connected", () => this.#setState("CONNECTED"));
 
     room.addListener("disconnected", () => this.#setState("DISCONNECTED"));
 
