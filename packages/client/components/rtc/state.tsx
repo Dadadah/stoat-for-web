@@ -113,7 +113,10 @@ class Voice {
           .then((track) => this.#setMicrophone(typeof track !== "undefined"));
     });
 
-    room.addListener("connected", () => this.#setState("CONNECTED"));
+    room.addListener("connected", () => {
+      this.#setState("CONNECTED");
+      console.log("LOCAL PARTICIPANT: ", room.localParticipant);
+    });
 
     room.addListener("disconnected", () => this.#setState("DISCONNECTED"));
 
@@ -124,11 +127,6 @@ class Voice {
     await room.connect(auth.url, auth.token, {
       autoSubscribe: false,
     });
-    
-    console.log(room.localParticipant.getTrackPublication(Track.Source.Microphone)?.audioTrack);
-    if (room.localParticipant.getTrackPublication(Track.Source.Microphone)?.audioTrack) {
-      room.localParticipant.getTrackPublication(Track.Source.Microphone).audioTrack.setProcessor(KrispNoiseFilter());
-    }
   }
 
   disconnect() {
