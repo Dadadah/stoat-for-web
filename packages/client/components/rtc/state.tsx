@@ -10,7 +10,7 @@ import {
 import { RoomContext } from "solid-livekit-components";
 
 import { Room, Track } from "livekit-client";
-import { KrispNoiseFilter } from "@livekit/krisp-noise-filter";
+import { DenoiseTrackProcessor } from "@cc-livekit/denoise-plugin";
 import { Channel } from "stoat.js";
 
 import { useState } from "@revolt/state";
@@ -115,7 +115,7 @@ class Voice {
           .setMicrophoneEnabled(true)
           .then((track) => {
             this.#setMicrophone(typeof track !== "undefined");
-            track?.audioTrack?.setProcessor(KrispNoiseFilter());
+            track?.audioTrack?.setProcessor(new DenoiseTrackProcessor());
           });
     });
 

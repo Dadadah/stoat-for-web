@@ -38,6 +38,7 @@
     "vite-plugin-solid-svg": "^0.8.1"
   },
   "dependencies": {
+    "@cc-livekit/denoise-plugin": "^1.0.10",
     "@codemirror/autocomplete": "^6.19.0",
     "@codemirror/commands": "^6.8.1",
     "@codemirror/lang-markdown": "^6.3.4",
@@ -72,7 +73,6 @@
     "@lezer/highlight": "^1.2.1",
     "@lingui-solid/solid": "^5.1.4",
     "@livekit/components-core": "^0.9.3",
-    "@livekit/krisp-noise-filter": "^0.4.1",
     "@material-design-icons/svg": "^0.14.15",
     "@material-symbols/svg-400": "^0.35.1",
     "@material/material-color-utilities": "^0.3.0",
