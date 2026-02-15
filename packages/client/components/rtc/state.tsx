@@ -10,7 +10,7 @@ import {
 import { RoomContext } from "solid-livekit-components";
 
 import { Room, VideoPresets } from "livekit-client";
-import { Channel } from "stoat.js";
+import { KrispNoiseFilter } from "@livekit/krisp-noise-filter";
 
 import { useState } from "@revolt/state";
 import { Voice as VoiceSettings } from "@revolt/state/stores/Voice";
@@ -90,6 +90,7 @@ class Voice {
         deviceId: this.#settings.preferredAudioInputDevice,
         echoCancellation: this.#settings.echoCancellation,
         noiseSuppression: this.#settings.noiseSupression,
+        processor: KrispNoiseFilter(),
       },
       videoCaptureDefaults: {
         resolution: VideoPresets.h720.resolution,
