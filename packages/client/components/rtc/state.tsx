@@ -10,6 +10,7 @@ import {
 import { RoomContext } from "solid-livekit-components";
 
 import { Room } from "livekit-client";
+import { KrispNoiseFilter } from "@livekit/krisp-noise-filter";
 import { Channel } from "stoat.js";
 
 import { useState } from "@revolt/state";
@@ -90,6 +91,7 @@ class Voice {
         deviceId: this.#settings.preferredAudioInputDevice,
         echoCancellation: this.#settings.echoCancellation,
         noiseSuppression: this.#settings.noiseSupression,
+        processor: KrispNoiseFilter(),
       },
       audioOutput: {
         deviceId: this.#settings.preferredAudioOutputDevice,
