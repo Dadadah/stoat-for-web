@@ -106,7 +106,10 @@ class Voice {
       this.#setDeafen(false);
       this.#setVideo(false);
       this.#setScreenshare(false);
+    });
 
+    room.addListener("connected", () => {
+      this.#setState("CONNECTED");
       if (this.speakingPermission)
         room.localParticipant
           .setMicrophoneEnabled(true)
@@ -115,8 +118,6 @@ class Voice {
             track?.audioTrack?.setProcessor(KrispNoiseFilter());
           });
     });
-
-    room.addListener("connected", () => this.#setState("CONNECTED"));
 
     room.addListener("disconnected", () => this.#setState("DISCONNECTED"));
 
