@@ -112,7 +112,7 @@ class Voice {
           .setMicrophoneEnabled(true)
           .then((track) => {
             this.#setMicrophone(typeof track !== "undefined");
-            room.localParticipant.getTrackPublication(Track.Source.Microphone)?.audioTrack?.setProcessor(KrispNoiseFilter());
+            track?.audioTrack?.setProcessor(KrispNoiseFilter());
           });
     });
 
