@@ -9,14 +9,9 @@ import {
 } from "solid-js";
 import { RoomContext } from "solid-livekit-components";
 
-<<<<<<< HEAD
-import { Room, Track, VideoPresets } from "livekit-client";
-import { KrispNoiseFilter } from "@livekit/krisp-noise-filter";
-=======
-import { Room, Track } from "livekit-client";
+import { Room, VideoPresets } from "livekit-client";
 import { DenoiseTrackProcessor } from "@cc-livekit/denoise-plugin";
 import { Channel } from "stoat.js";
->>>>>>> f2df7ae5d01267fafbd3c5a34e46eaa4ed114500
 
 import { useState } from "@revolt/state";
 import { Voice as VoiceSettings } from "@revolt/state/stores/Voice";
