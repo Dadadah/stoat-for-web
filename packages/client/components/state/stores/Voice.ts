@@ -8,6 +8,7 @@ export interface TypeVoice {
 
   echoCancellation: boolean;
   noiseSupression: boolean;
+  rnnoise: boolean;
 
   inputVolume: number;
   outputVolume: number;
@@ -42,6 +43,7 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
     return {
       echoCancellation: true,
       noiseSupression: true,
+      rnnoise: false,
       inputVolume: 1.0,
       outputVolume: 1.0,
       userVolumes: {},
@@ -69,6 +71,10 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
 
     if (typeof input.noiseSupression === "boolean") {
       data.noiseSupression = input.noiseSupression;
+    }
+
+    if (typeof input.rnnoise === "boolean") {
+      data.rnnoise = input.rnnoise;
     }
 
     if (typeof input.inputVolume === "number") {
@@ -164,6 +170,13 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
   }
 
   /**
+   * Set RNNoise
+   */
+  set rnnoise(value: boolean) {
+    this.set("rnnoise", value);
+  }
+
+  /**
    * Set input volume
    */
   set inputVolume(value: number) {
@@ -203,6 +216,13 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
    */
   get noiseSupression(): boolean | undefined {
     return this.get().noiseSupression;
+  }
+
+  /**
+   * Get rnnoise
+   */
+  get rnnoise(): boolean | undefined {
+    return this.get().rnnoise;
   }
 
   /**

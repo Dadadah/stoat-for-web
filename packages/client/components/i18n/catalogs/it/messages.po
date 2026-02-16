@@ -1189,6 +1189,10 @@ msgstr "Abilita notifiche desktop"
 msgid "Enable transparency glass/blur effects (slow on older machines)"
 msgstr ""
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Enhanced Noise Suppression Powered by RNNoise"
+msgstr ""
+
 #: components/modal/modals/RenameSession.tsx
 msgid "Enter a new name for this session"
 msgstr ""
