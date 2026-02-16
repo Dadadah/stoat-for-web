@@ -20,8 +20,9 @@ export function VoiceProcessingOptions() {
           action={<Checkbox checked={state.voice.noiseSupression} />}
           onClick={() =>
             {
-              state.voice.noiseSupression = !state.voice.noiseSupression;
-              state.voice.rnnoise = !state.voice.noiseSupression;
+              const newState = !state.voice.noiseSupression;
+              state.voice.noiseSupression = newState;
+              state.voice.rnnoise = !newState;
             }
           }
         >
@@ -32,8 +33,9 @@ export function VoiceProcessingOptions() {
           action={<Checkbox checked={state.voice.rnnoise} />}
           onClick={() =>
             {
-              state.voice.rnnoise = !state.voice.rnnoise;
-              state.voice.noiseSupression = !state.voice.rnnoise;
+              const newState = !state.voice.rnnoise;
+              state.voice.rnnoise = newState;
+              state.voice.noiseSupression = !newState;
             }
           }
         >

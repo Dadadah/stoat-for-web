@@ -43,7 +43,7 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
     return {
       echoCancellation: true,
       noiseSupression: true,
-      rnnoise: true,
+      rnnoise: false,
       inputVolume: 1.0,
       outputVolume: 1.0,
       userVolumes: {},
@@ -216,6 +216,13 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
    */
   get noiseSupression(): boolean | undefined {
     return this.get().noiseSupression;
+  }
+
+  /**
+   * Get rnnoise
+   */
+  get rnnoise(): boolean | undefined {
+    return this.get().rnnoise;
   }
 
   /**
