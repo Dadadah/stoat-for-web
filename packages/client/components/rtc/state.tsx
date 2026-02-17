@@ -117,7 +117,12 @@ class Voice {
         room.localParticipant.setMicrophoneEnabled(true).then((track) => {
           this.#setMicrophone(typeof track !== "undefined");
           if (this.#settings.rnnoise)
-            track?.audioTrack?.setProcessor(new DenoiseTrackProcessor());
+            track?.audioTrack?.setProcessor(
+              new DenoiseTrackProcessor({
+                workletCDNURL:
+                  "https://cdn.jsdelivr.net/gh/dadadah/livekit-rnnoise-processor@latest/dist/DenoiserWorklet.js",
+              }),
+            );
         });
     });
 
