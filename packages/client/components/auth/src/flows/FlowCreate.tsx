@@ -6,8 +6,9 @@ import { Button, Row, iconSize } from "@revolt/ui";
 
 import MdArrowBack from "@material-design-icons/svg/filled/arrow_back.svg?component-solid";
 
-import { useApi } from "../../../client";
+import { useApi, useClient } from "../../../client";
 
+import { Show, createMemo } from "solid-js";
 import { FlowTitle } from "./Flow";
 import { setFlowCheckEmail } from "./FlowCheck";
 import { Fields, Form } from "./Form";
@@ -17,6 +18,7 @@ import { Fields, Form } from "./Form";
  */
 export default function FlowCreate() {
   const api = useApi();
+  const getClient = useClient();
   const navigate = useNavigate();
 
   /**
@@ -27,11 +29,13 @@ export default function FlowCreate() {
     const email = data.get("email") as string;
     const password = data.get("password") as string;
     const captcha = data.get("captcha") as string;
+    const invite = data.get("invite") as string;
 
     await api.post("/auth/account/create", {
       email,
       password,
       captcha,
+      ...(invite ? { invite } : {}),
     });
 
     // FIXME: should tell client if email was sent
@@ -43,6 +47,14 @@ export default function FlowCreate() {
     navigate("/login/check", { replace: true });
   }
 
+  const isInviteOnly = createMemo(() => {
+    const client = getClient();
+    if (client.configured()) {
+      return client.configuration?.features.invite_only;
+    }
+    return false;
+  });
+
   return (
     <>
       <FlowTitle subtitle={<Trans>Create an account</Trans>} emoji="wave">
@@ -50,6 +62,9 @@ export default function FlowCreate() {
       </FlowTitle>
       <Form onSubmit={create} captcha={CONFIGURATION.HCAPTCHA_SITEKEY}>
         <Fields fields={["email", "password"]} />
+        <Show when={isInviteOnly()}>
+          <Fields fields={["invite"]} />
+        </Show>
         <Row justify>
           <a href="..">
             <Button variant="text">
