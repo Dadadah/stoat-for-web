@@ -75,6 +75,11 @@ export default {
   MAX_FILE_SIZE:
     (import.meta.env.VITE_CFG_MAX_FILE_SIZE as number) ?? 20_000_000,
   /**
+   * Enable video allows the web client to enable video and screensharing
+   */
+  ENABLE_VIDEO:
+    (import.meta.env.VITE_CFG_ENABLE_VIDEO as boolean) ?? false,
+  /**
    * Session ID to set during development.
    */
   DEVELOPMENT_SESSION_ID: import.meta.env.DEV
