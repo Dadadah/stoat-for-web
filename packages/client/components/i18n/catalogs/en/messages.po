@@ -1194,6 +1194,10 @@ msgstr "Enable Desktop Notifications"
 msgid "Enable transparency glass/blur effects (slow on older machines)"
 msgstr "Enable transparency glass/blur effects (slow on older machines)"
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Enhanced Noise Suppression Powered by RNNoise"
+msgstr "Enhanced Noise Suppression Powered by RNNoise"
+
 #: components/modal/modals/RenameSession.tsx
 msgid "Enter a new name for this session"
 msgstr "Enter a new name for this session"
@@ -1220,6 +1224,10 @@ msgstr "Enter your current password."
 #: components/modal/modals/EditEmail.tsx
 msgid "Enter your current password..."
 msgstr "Enter your current password..."
+
+#: components/auth/src/flows/Form.tsx
+msgid "Enter your invite code."
+msgstr "Enter your invite code."
 
 #: components/auth/src/flows/Form.tsx
 msgid "Enter your preferred username."
@@ -1453,6 +1461,7 @@ msgstr "Invite all of your friends, some cool bots, and throw a big party."
 msgid "Invite Bot"
 msgstr "Invite Bot"
 
+#: components/auth/src/flows/Form.tsx
 #: components/app/interface/settings/server/invites/ListServerInvites.tsx
 msgid "Invite Code"
 msgstr "Invite Code"

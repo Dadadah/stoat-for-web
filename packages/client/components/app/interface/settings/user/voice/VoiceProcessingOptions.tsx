@@ -18,11 +18,28 @@ export function VoiceProcessingOptions() {
         <CategoryButton
           icon="blank"
           action={<Checkbox checked={state.voice.noiseSupression} />}
-          onClick={() =>
-            (state.voice.noiseSupression = !state.voice.noiseSupression)
-          }
+          onClick={() => {
+            const newState = !state.voice.noiseSupression;
+            state.voice.noiseSupression = newState;
+            if (newState) {
+              state.voice.rnnoise = false;
+            }
+          }}
         >
           <Trans>Browser Noise Supression</Trans>
+        </CategoryButton>
+        <CategoryButton
+          icon="blank"
+          action={<Checkbox checked={state.voice.rnnoise} />}
+          onClick={() => {
+            const newState = !state.voice.rnnoise;
+            state.voice.rnnoise = newState;
+            if (newState) {
+              state.voice.noiseSupression = false;
+            }
+          }}
+        >
+          <Trans>Enhanced Noise Suppression Powered by RNNoise</Trans>
         </CategoryButton>
         <CategoryButton
           icon="blank"

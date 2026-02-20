@@ -1194,6 +1194,10 @@ msgstr "ᒷリᔑʖꖎᒷ ↸ᒷᓭꖌℸ𝙹!¡ リ𝙹ℸ╎⎓╎ᓵᔑℸ╎
 msgid "Enable transparency glass/blur effects (slow on older machines)"
 msgstr ""
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Enhanced Noise Suppression Powered by RNNoise"
+msgstr ""
+
 #: components/modal/modals/RenameSession.tsx
 msgid "Enter a new name for this session"
 msgstr ""
@@ -1219,6 +1223,10 @@ msgstr "ᒷリℸᒷ∷ ||𝙹⚍∷ ᓵ⚍∷∷ᒷリℸ !¡ᔑᓭᓭ∴𝙹�
 #: components/modal/modals/EditPassword.tsx
 #: components/modal/modals/EditEmail.tsx
 msgid "Enter your current password..."
+msgstr ""
+
+#: components/auth/src/flows/Form.tsx
+msgid "Enter your invite code."
 msgstr ""
 
 #: components/auth/src/flows/Form.tsx
@@ -1453,6 +1461,7 @@ msgstr "╎リ⍊╎ℸᒷ ᔑꖎꖎ 𝙹⎓ ||𝙹⚍∷ ⎓∷╎ᒷリ↸ᓭ,
 msgid "Invite Bot"
 msgstr ""
 
+#: components/auth/src/flows/Form.tsx
 #: components/app/interface/settings/server/invites/ListServerInvites.tsx
 msgid "Invite Code"
 msgstr "╎リ⍊╎ℸᒷ ᓵ𝙹↸ᒷ"
