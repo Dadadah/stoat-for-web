@@ -1,4 +1,4 @@
-import { Match, Show, Switch } from "solid-js";
+import { createEffect, Match, Show, Switch } from "solid-js";
 import {
   TrackLoop,
   TrackReference,
@@ -139,7 +139,7 @@ function UserTile() {
 
   let videoRef: HTMLDivElement | undefined;
 
-  const toggleFullscreen = () => {
+  function toggleFullscreen() {
     if (!videoRef || !isTrackReference(track) || isVideoMuted()) return;
     if (!document.fullscreenElement) {
       videoRef.requestFullscreen();
@@ -147,6 +147,12 @@ function UserTile() {
       document.exitFullscreen();
     }
   };
+
+  createEffect(() => {
+    if (isVideoMuted()) {
+      document.exitFullscreen();
+    }
+  });
 
   return (
     <div
