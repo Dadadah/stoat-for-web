@@ -121,7 +121,15 @@ class Voice {
     room.addListener("disconnected", () => this.#setState("DISCONNECTED"));
 
     if (!auth) {
-      auth = await channel.joinCall("worldwide");
+      let voiceServer = "worldwide";
+      if (channel.server?.description) {
+        const descSplits = channel.server.description.split("\n");
+        const lastLine = descSplits[descSplits?.length - 1];
+        if (lastLine.startsWith("voice-server:")) {
+          voiceServer = lastLine.replace("voice-server:", "");
+        }
+      }
+      auth = await channel.joinCall(voiceServer);
     }
 
     await room.connect(auth.url, auth.token, {
