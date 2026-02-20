@@ -82,12 +82,7 @@ export function VoiceCallCardActions(props: { size: "xs" | "sm" }) {
         }}
         isDisabled={!isVideoEnabled()}
       >
-        <Show
-          when={!isVideoEnabled() || voice.video()}
-          fallback={<Symbol>camera_video_off</Symbol>}
-        >
-          <Symbol>camera_video</Symbol>
-        </Show>
+        <Symbol>camera_video</Symbol>
       </IconButton>
       <IconButton
         size={props.size}
