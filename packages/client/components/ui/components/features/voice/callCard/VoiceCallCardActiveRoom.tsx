@@ -1,15 +1,15 @@
 import { createEffect, Match, Show, Switch } from "solid-js";
 import {
+  isTrackReference,
   TrackLoop,
   TrackReference,
-  VideoTrack,
-  isTrackReference,
   useEnsureParticipant,
   useIsMuted,
   useIsSpeaking,
   useMaybeTrackRefContext,
   useTrackRefContext,
   useTracks,
+  VideoTrack,
 } from "solid-livekit-components";
 
 import { Track } from "livekit-client";
@@ -146,7 +146,7 @@ function UserTile() {
     } else {
       document.exitFullscreen();
     }
-  };
+  }
 
   createEffect(() => {
     if (isVideoMuted()) {
