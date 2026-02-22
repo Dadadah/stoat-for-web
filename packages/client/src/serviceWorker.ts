@@ -27,8 +27,6 @@ self.addEventListener("push", (event) => {
   if (!event.data) return;
   const payload = event.data.text();
 
-  console.log(payload);
-
   const notification: StoatPushNotification = JSON.parse(payload);
 
   if (!notification.title) {
