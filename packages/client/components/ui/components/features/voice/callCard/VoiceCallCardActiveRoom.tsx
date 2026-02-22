@@ -1,15 +1,15 @@
-import { Match, Show, Switch } from "solid-js";
+import { createEffect, Match, Show, Switch } from "solid-js";
 import {
+  isTrackReference,
   TrackLoop,
   TrackReference,
-  VideoTrack,
-  isTrackReference,
   useEnsureParticipant,
   useIsMuted,
   useIsSpeaking,
   useMaybeTrackRefContext,
   useTrackRefContext,
   useTracks,
+  VideoTrack,
 } from "solid-livekit-components";
 
 import { Track } from "livekit-client";
@@ -128,21 +128,31 @@ function UserTile() {
     source: Track.Source.Microphone,
   });
 
+  const isVideoMuted = useIsMuted({
+    participant,
+    source: Track.Source.Camera,
+  });
+
   const isSpeaking = useIsSpeaking(participant);
 
   const user = useUser(participant.identity);
 
   let videoRef: HTMLDivElement | undefined;
 
-  const toggleFullscreen = () => {
-    if (!videoRef) return;
-    if (!isTrackReference(track)) return;
+  function toggleFullscreen() {
+    if (!videoRef || !isTrackReference(track) || isVideoMuted()) return;
     if (!document.fullscreenElement) {
       videoRef.requestFullscreen();
     } else {
       document.exitFullscreen();
     }
-  };
+  }
+
+  createEffect(() => {
+    if (isVideoMuted()) {
+      document.exitFullscreen();
+    }
+  });
 
   return (
     <div
@@ -174,7 +184,7 @@ function UserTile() {
           </AvatarOnly>
         }
       >
-        <Match when={isTrackReference(track)}>
+        <Match when={isTrackReference(track) && !isVideoMuted()}>
           <VideoTrack
             style={{
               "grid-area": "1/1",
@@ -195,7 +205,7 @@ function UserTile() {
             userId={participant.identity}
             muted={isMuted()}
           />
-          <Show when={isTrackReference(track)}>
+          <Show when={isTrackReference(track) && !isVideoMuted()}>
             <Symbol size={18}>fullscreen</Symbol>
           </Show>
         </OverlayInner>
