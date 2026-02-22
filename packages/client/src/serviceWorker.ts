@@ -3,8 +3,43 @@ import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching";
 
 declare let self: ServiceWorkerGlobalScope;
 
+interface ChannelPartial {
+  channel_type: string;
+  name?: string;
+}
+
+interface StoatPushNotification {
+  author?: string;
+  body?: string;
+  icon?: string;
+  channel?: ChannelPartial;
+  url?: string;
+}
+
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
+});
+
+self.addEventListener("push", (event) => {
+  if (!event.data) return;
+  const payload = event.data.text();
+
+  const notification: StoatPushNotification = JSON.parse(payload);
+
+  if (notification.author) {
+    if (notification.channel?.channel_type === "DirectMessage") {
+      notification.body = `${notification.author} messaged you.`;
+    } else {
+      notification.body = `${notification.author} tagged you in ${notification.channel?.name}`;
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification("Stoat", {
+      icon: notification.icon,
+      body: notification.body,
+    }),
+  );
 });
 
 cleanupOutdatedCaches();
