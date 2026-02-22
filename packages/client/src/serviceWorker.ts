@@ -30,7 +30,7 @@ self.addEventListener("push", (event) => {
     if (notification.channel?.channel_type === "DirectMessage") {
       notification.body = `${notification.author} messaged you.`;
     } else {
-      notification.body = `${notification.author} tagged you in ${notification.channel?.name}`;
+      notification.body = `${notification.author} mentioned you in ${notification.channel?.name}`;
     }
   }
 
