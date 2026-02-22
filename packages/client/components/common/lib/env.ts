@@ -78,7 +78,7 @@ export default {
    * Enable video allows the web client to enable video and screensharing
    */
   ENABLE_VIDEO:
-    (import.meta.env.VITE_CFG_ENABLE_VIDEO as string).toLowerCase() == "true",
+    ((import.meta.env.VITE_CFG_ENABLE_VIDEO as string) ?? "").toLowerCase() == "true",
   /**
    * Session ID to set during development.
    */
