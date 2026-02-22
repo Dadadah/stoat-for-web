@@ -28,8 +28,8 @@ export class ThinAuth {
   }
 
   async load() {
-    const data: any = await localforage.getItem("auth");
-    if (data.session) {
+    const data: TypeAuth | null = await localforage.getItem("auth");
+    if (data && data.session) {
       this.auth = data;
     }
   }
