@@ -27,11 +27,7 @@ self.addEventListener("message", (event) => {
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   if (typeof event.notification.data === "string") {
-    event.waitUntil(
-      self.clients
-        .openWindow(event.notification.data)
-        .then((windowClient) => (windowClient ? windowClient.focus() : null)),
-    );
+    event.waitUntil(self.clients.openWindow(event.notification.data));
   }
 });
 

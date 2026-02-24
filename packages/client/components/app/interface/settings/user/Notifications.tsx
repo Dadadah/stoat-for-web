@@ -28,6 +28,7 @@ export default function Notifications(props: { isDesktop: boolean }) {
           batch(() => {
             state.notifications.setEnabled("denied");
             state.notifications.setPushEnabled("denied");
+            killServiceWorkerSubscription(getClient());
           });
           // Notifications are allowed, but not push notifications
         } else {
@@ -39,6 +40,7 @@ export default function Notifications(props: { isDesktop: boolean }) {
       batch(() => {
         state.notifications.setEnabled("denied");
         state.notifications.setPushEnabled("denied");
+        killServiceWorkerSubscription(getClient());
       });
     }
   }
