@@ -19,6 +19,7 @@ export interface TypeVoice {
 
   echoCancellation: boolean;
   noiseSupression: NoiseSuppresionState;
+  autoGainControl: boolean;
 
   inputVolume: number;
   outputVolume: number;
@@ -53,6 +54,7 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
     return {
       echoCancellation: true,
       noiseSupression: "browser",
+      autoGainControl: true,
       inputVolume: 1.0,
       outputVolume: 1.0,
       userVolumes: {},
@@ -88,6 +90,10 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
       NoiseSuppresionStates.includes(input.noiseSupression)
     ) {
       data.noiseSupression = input.noiseSupression;
+    }
+
+    if (typeof input.autoGainControl === "boolean") {
+      data.autoGainControl = input.autoGainControl;
     }
 
     if (typeof input.inputVolume === "number") {
@@ -183,6 +189,13 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
   }
 
   /**
+   * Set auto gain control
+   */
+  set autoGainControl(value: boolean) {
+    this.set("autoGainControl", value);
+  }
+
+  /**
    * Set input volume
    */
   set inputVolume(value: number) {
@@ -222,6 +235,13 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
    */
   get noiseSupression(): NoiseSuppresionState | undefined {
     return this.get().noiseSupression;
+  }
+
+  /**
+   * Get auto gain control
+   */
+  get autoGainControl(): boolean | undefined {
+    return this.get().autoGainControl;
   }
 
   /**
