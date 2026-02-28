@@ -91,7 +91,7 @@ class Voice {
       audioCaptureDefaults: {
         deviceId: this.#settings.preferredAudioInputDevice,
         echoCancellation: this.#settings.echoCancellation,
-        noiseSuppression: this.#settings.noiseSupression,
+        noiseSuppression: this.#settings.noiseSupression === "browser",
       },
       audioOutput: {
         deviceId: this.#settings.preferredAudioOutputDevice,
@@ -114,7 +114,7 @@ class Voice {
       if (this.speakingPermission)
         room.localParticipant.setMicrophoneEnabled(true).then((track) => {
           this.#setMicrophone(typeof track !== "undefined");
-          if (this.#settings.rnnoise) {
+          if (this.#settings.noiseSupression === "enhanced") {
             track?.audioTrack?.setProcessor(
               new DenoiseTrackProcessor({
                 workletCDNURL: CONFIGURATION.RNNOISE_WORKLET_CDN_URL,
