@@ -90,6 +90,7 @@ class Voice {
         deviceId: this.#settings.preferredAudioInputDevice,
         echoCancellation: this.#settings.echoCancellation,
         noiseSuppression: this.#settings.noiseSupression,
+        autoGainControl: this.#settings.autoGainControl,
       },
       audioOutput: {
         deviceId: this.#settings.preferredAudioOutputDevice,
