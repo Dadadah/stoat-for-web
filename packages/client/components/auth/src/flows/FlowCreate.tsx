@@ -1,12 +1,12 @@
 import { Trans } from "@lingui-solid/solid/macro";
 
+import { useApi, useClient, useClientLifecycle } from "@revolt/client";
 import { CONFIGURATION } from "@revolt/common";
+import { useModals } from "@revolt/modal";
 import { useNavigate } from "@revolt/routing";
 import { Button, Row, iconSize } from "@revolt/ui";
 
 import MdArrowBack from "@material-design-icons/svg/filled/arrow_back.svg?component-solid";
-
-import { useApi, useClient } from "../../../client";
 
 import { FlowTitle } from "./Flow";
 import { setFlowCheckEmail } from "./FlowCheck";
@@ -19,6 +19,8 @@ export default function FlowCreate() {
   const api = useApi();
   const getClient = useClient();
   const navigate = useNavigate();
+  const modals = useModals();
+  const { login } = useClientLifecycle();
 
   /**
    * Create an account
@@ -42,6 +44,13 @@ export default function FlowCreate() {
       setFlowCheckEmail(email);
       navigate("/login/check", { replace: true });
     } else {
+      await login(
+        {
+          email,
+          password,
+        },
+        modals,
+      );
       navigate("/login/auth", { replace: true });
     }
   }
