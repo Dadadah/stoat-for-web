@@ -1,12 +1,12 @@
 import { Trans } from "@lingui-solid/solid/macro";
 
+import { useApi, useClient, useClientLifecycle } from "@revolt/client";
 import { CONFIGURATION } from "@revolt/common";
+import { useModals } from "@revolt/modal";
 import { useNavigate } from "@revolt/routing";
 import { Button, Row, iconSize } from "@revolt/ui";
 
 import MdArrowBack from "@material-design-icons/svg/filled/arrow_back.svg?component-solid";
-
-import { useApi } from "../../../client";
 
 import { FlowTitle } from "./Flow";
 import { setFlowCheckEmail } from "./FlowCheck";
@@ -17,7 +17,10 @@ import { Fields, Form } from "./Form";
  */
 export default function FlowCreate() {
   const api = useApi();
+  const getClient = useClient();
   const navigate = useNavigate();
+  const modals = useModals();
+  const { login } = useClientLifecycle();
 
   /**
    * Create an account
@@ -34,13 +37,19 @@ export default function FlowCreate() {
       captcha,
     });
 
-    // FIXME: should tell client if email was sent
-    //        or if email even needs to be confirmed
-
-    // TODO: log straight in if no email confirmation?
-
-    setFlowCheckEmail(email);
-    navigate("/login/check", { replace: true });
+    if (getClient().configuration?.features.email) {
+      setFlowCheckEmail(email);
+      navigate("/login/check", { replace: true });
+    } else {
+      await login(
+        {
+          email,
+          password,
+        },
+        modals,
+      );
+      navigate("/login/auth", { replace: true });
+    }
   }
 
   return (
