@@ -37,9 +37,6 @@ export default function FlowCreate() {
       captcha,
     });
 
-    // FIXME: should tell client if email was sent
-    //        or if email even needs to be confirmed
-
     if (getClient().configuration?.features.email) {
       setFlowCheckEmail(email);
       navigate("/login/check", { replace: true });
