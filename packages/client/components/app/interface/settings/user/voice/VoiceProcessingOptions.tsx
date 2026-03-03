@@ -26,6 +26,15 @@ export function VoiceProcessingOptions() {
         >
           <Trans>Browser Echo Cancellation</Trans>
         </CategoryButton>
+        <CategoryButton
+          icon="blank"
+          action={<Checkbox checked={state.voice.autoGainControl} />}
+          onClick={() =>
+            (state.voice.autoGainControl = !state.voice.autoGainControl)
+          }
+        >
+          <Trans>Automatic Gain Control</Trans>
+        </CategoryButton>
       </CategoryButton.Group>
     </Column>
   );
