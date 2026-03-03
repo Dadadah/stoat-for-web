@@ -639,6 +639,9 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
+      '@eslint/js':
+        specifier: ^9.39.1
+        version: 9.39.1
       '@mxssfd/typedoc-theme':
         specifier: ^1.1.7
         version: 1.1.7(typedoc@0.27.9(typescript@5.8.3))
