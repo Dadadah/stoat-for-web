@@ -18,7 +18,7 @@ import { styled } from "styled-system/jsx";
 
 import { UserContextMenu } from "@revolt/app";
 import { useUser } from "@revolt/markdown/users";
-import { InRoom } from "@revolt/rtc";
+import { InRoom, useVoice } from "@revolt/rtc";
 import { Avatar } from "@revolt/ui/components/design";
 import { OverflowingText } from "@revolt/ui/components/utils";
 import { Symbol } from "@revolt/ui/components/utils/Symbol";
@@ -229,6 +229,7 @@ function ScreenshareTile() {
   const participant = useEnsureParticipant();
   const track = useMaybeTrackRefContext();
   const user = useUser(participant.identity);
+  const voice = useVoice();
 
   const isMuted = useIsMuted({
     participant,
@@ -237,7 +238,7 @@ function ScreenshareTile() {
 
   let videoRef: HTMLDivElement | undefined;
 
-  const toggleFullscreen = () => {
+  function toggleFullscreen() {
     if (!videoRef) return;
     if (!isTrackReference(track)) return;
     if (!document.fullscreenElement) {
@@ -245,7 +246,10 @@ function ScreenshareTile() {
     } else {
       document.exitFullscreen();
     }
-  };
+  }
+
+  const isScreenshareMuted = () =>
+    voice.getScreenshareMuted(user().user!.id) ? "by-user" : isMuted() || false;
 
   return (
     <div
@@ -253,6 +257,15 @@ function ScreenshareTile() {
       class={tile() + " group"}
       onClick={toggleFullscreen}
       style={{ cursor: "pointer" }}
+      use:floating={{
+        contextMenu: () => (
+          <UserContextMenu
+            user={user().user!}
+            member={user().member}
+            isScreenshare
+          />
+        ),
+      }}
     >
       <VideoTrack
         style={{
@@ -268,8 +281,17 @@ function ScreenshareTile() {
       <Overlay showOnHover>
         <OverlayInner>
           <OverflowingText>{user().username}</OverflowingText>
-          <Show when={isMuted()}>
-            <Symbol size={18}>no_sound</Symbol>
+          <Show when={isScreenshareMuted()}>
+            <Symbol
+              size={18}
+              color={
+                isScreenshareMuted() === "by-user"
+                  ? "var(--md-sys-color-error)"
+                  : undefined
+              }
+            >
+              no_sound
+            </Symbol>
           </Show>
           <Symbol size={18}>fullscreen</Symbol>
         </OverlayInner>

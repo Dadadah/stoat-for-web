@@ -1,10 +1,10 @@
 import {
   Accessor,
-  JSX,
-  Setter,
   batch,
   createContext,
   createSignal,
+  JSX,
+  Setter,
   useContext,
 } from "solid-js";
 import { RoomContext } from "solid-livekit-components";
@@ -16,6 +16,7 @@ import { useState } from "@revolt/state";
 import { Voice as VoiceSettings } from "@revolt/state/stores/Voice";
 import { VoiceCallCardContext } from "@revolt/ui/components/features/voice/callCard/VoiceCallCard";
 
+import { createStore, SetStoreFunction } from "solid-js/store";
 import { InRoom } from "./components/InRoom";
 import { RoomAudioManager } from "./components/RoomAudioManager";
 
@@ -25,6 +26,11 @@ type State =
   | "CONNECTING"
   | "CONNECTED"
   | "RECONNECTING";
+
+type ScreenShareSettings = {
+  volumes: Record<string, number>;
+  mutes: Record<string, boolean>;
+};
 
 class Voice {
   #settings: VoiceSettings;
@@ -49,6 +55,9 @@ class Voice {
 
   screenshare: Accessor<boolean>;
   #setScreenshare: Setter<boolean>;
+
+  screenshareSettingStore: ScreenShareSettings;
+  #setScreenshareSettingStore: SetStoreFunction<ScreenShareSettings>;
 
   constructor(voiceSettings: VoiceSettings) {
     this.#settings = voiceSettings;
@@ -80,6 +89,15 @@ class Voice {
     const [screenshare, setScreenshare] = createSignal(false);
     this.screenshare = screenshare;
     this.#setScreenshare = setScreenshare;
+
+    const [screenshareSettingsStore, setScreenshareSettingsStore] = createStore(
+      {
+        mutes: {},
+        volumes: {},
+      } as ScreenShareSettings,
+    );
+    this.screenshareSettingStore = screenshareSettingsStore as never;
+    this.#setScreenshareSettingStore = setScreenshareSettingsStore;
   }
 
   async connect(channel: Channel, auth?: { url: string; token: string }) {
@@ -176,6 +194,7 @@ class Voice {
     if (!room) throw "invalid state";
     await room.localParticipant.setScreenShareEnabled(
       !room.localParticipant.isScreenShareEnabled,
+      { audio: true },
     );
 
     this.#setScreenshare(room.localParticipant.isScreenShareEnabled);
@@ -191,6 +210,22 @@ class Voice {
 
   get speakingPermission() {
     return !!this.channel()?.havePermission("Speak");
+  }
+
+  setScreenshareVolume(userId: string, volume: number) {
+    this.#setScreenshareSettingStore("volumes", userId, volume);
+  }
+
+  getScreenshareVolume(userId: string): number {
+    return this.screenshareSettingStore.volumes[userId] || 1.0;
+  }
+
+  setScreenshareMuted(userId: string, muted: boolean) {
+    this.#setScreenshareSettingStore("mutes", userId, muted);
+  }
+
+  getScreenshareMuted(userId: string): boolean {
+    return this.screenshareSettingStore.mutes[userId] || false;
   }
 }
 
