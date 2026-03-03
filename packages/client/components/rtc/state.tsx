@@ -10,6 +10,7 @@ import {
 import { RoomContext } from "solid-livekit-components";
 
 import { Room } from "livekit-client";
+import { DenoiseTrackProcessor } from "livekit-rnnoise-processor";
 import { Channel } from "stoat.js";
 
 import { useState } from "@revolt/state";
@@ -17,6 +18,7 @@ import { Voice as VoiceSettings } from "@revolt/state/stores/Voice";
 import { VoiceCallCardContext } from "@revolt/ui/components/features/voice/callCard/VoiceCallCard";
 
 import { createStore, SetStoreFunction } from "solid-js/store";
+import { CONFIGURATION } from "@revolt/common";
 import { InRoom } from "./components/InRoom";
 import { RoomAudioManager } from "./components/RoomAudioManager";
 
@@ -107,7 +109,7 @@ class Voice {
       audioCaptureDefaults: {
         deviceId: this.#settings.preferredAudioInputDevice,
         echoCancellation: this.#settings.echoCancellation,
-        noiseSuppression: this.#settings.noiseSupression,
+        noiseSuppression: this.#settings.noiseSupression === "browser",
       },
       audioOutput: {
         deviceId: this.#settings.preferredAudioOutputDevice,
@@ -123,14 +125,22 @@ class Voice {
       this.#setDeafen(false);
       this.#setVideo(false);
       this.#setScreenshare(false);
-
-      if (this.speakingPermission)
-        room.localParticipant
-          .setMicrophoneEnabled(true)
-          .then((track) => this.#setMicrophone(typeof track !== "undefined"));
     });
 
-    room.addListener("connected", () => this.#setState("CONNECTED"));
+    room.addListener("connected", () => {
+      this.#setState("CONNECTED");
+      if (this.speakingPermission)
+        room.localParticipant.setMicrophoneEnabled(true).then((track) => {
+          this.#setMicrophone(typeof track !== "undefined");
+          if (this.#settings.noiseSupression === "enhanced") {
+            track?.audioTrack?.setProcessor(
+              new DenoiseTrackProcessor({
+                workletCDNURL: CONFIGURATION.RNNOISE_WORKLET_CDN_URL,
+              }),
+            );
+          }
+        });
+    });
 
     room.addListener("disconnected", () => this.#setState("DISCONNECTED"));
 

@@ -81,6 +81,11 @@ export default {
     ((import.meta.env.VITE_CFG_ENABLE_VIDEO as string) ?? "").toLowerCase() ==
     "true",
   /**
+   * RNNoise worklet CDN host location. Defaults to blank, which uses the url provided by the livekit-rnnoise-processor package.
+   */
+  RNNOISE_WORKLET_CDN_URL:
+    (import.meta.env.VITE_RNNOISE_WORKLET_CDN_URL as string) ?? "",
+  /**
    * Session ID to set during development.
    */
   DEVELOPMENT_SESSION_ID: import.meta.env.DEV
