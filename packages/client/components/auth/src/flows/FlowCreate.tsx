@@ -8,7 +8,7 @@ import MdArrowBack from "@material-design-icons/svg/filled/arrow_back.svg?compon
 
 import { useApi, useClient } from "../../../client";
 
-import { Show, createMemo } from "solid-js";
+import { Show } from "solid-js";
 import { FlowTitle } from "./Flow";
 import { setFlowCheckEmail } from "./FlowCheck";
 import { Fields, Form } from "./Form";
@@ -47,13 +47,13 @@ export default function FlowCreate() {
     navigate("/login/check", { replace: true });
   }
 
-  const isInviteOnly = createMemo(() => {
+  const isInviteOnly = () => {
     const client = getClient();
     if (client.configured()) {
       return client.configuration?.features.invite_only;
     }
     return false;
-  });
+  };
 
   return (
     <>
