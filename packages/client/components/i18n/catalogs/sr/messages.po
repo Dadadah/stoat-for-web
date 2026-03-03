@@ -97,8 +97,8 @@ msgstr ""
 msgid "{0} left"
 msgstr ""
 
-#. placeholder {0}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).from?.username
-#. placeholder {1}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).to?.username
+#. placeholder {0}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).from ?.username
+#. placeholder {1}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).to ?.username
 #: components/client/NotificationsWorker.tsx
 msgid "{0} made {1} the new group owner"
 msgstr ""
@@ -390,6 +390,10 @@ msgstr "Додели улоге"
 msgid "Authenticator App"
 msgstr "Апликација за аутентификацију"
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Automatic Gain Control"
+msgstr ""
+
 #: components/app/interface/settings/user/profile/UserProfileEditor.tsx
 msgid "Avatar"
 msgstr "Профилна Слика"
@@ -465,12 +469,17 @@ msgid "Bot"
 msgstr "Бот"
 
 #: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Browser"
+msgstr ""
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
 msgid "Browser Echo Cancellation"
 msgstr ""
 
 #: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
-msgid "Browser Noise Supression"
-msgstr ""
+#~ msgid "Browser Noise Supression"
+#~ msgstr ""
 
 #: components/app/interface/settings/user/Feedback.tsx
 msgid "Bug Tracker"
@@ -1038,6 +1047,8 @@ msgstr "Онемогући Налог"
 msgid "Disable one-time password authenticator"
 msgstr ""
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
 #: components/app/interface/settings/server/Overview.tsx
 #: components/app/interface/settings/server/Overview.tsx
 #: components/app/interface/settings/server/Overview.tsx
@@ -1190,8 +1201,20 @@ msgstr "Омогући аутентикациону апликацију"
 msgid "Enable Desktop Notifications"
 msgstr "Омогући Desktop Oбавештања"
 
+#: components/app/interface/settings/user/Notifications.tsx
+msgid "Enable Push Notifications"
+msgstr ""
+
 #: components/app/interface/settings/user/appearance/AppearanceMenu.tsx
 msgid "Enable transparency glass/blur effects (slow on older machines)"
+msgstr ""
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Enhanced"
+msgstr ""
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Enhanced (RNNoise)"
 msgstr ""
 
 #: components/modal/modals/RenameSession.tsx
@@ -1219,6 +1242,10 @@ msgstr "Унесите своју тренутну лозинку."
 #: components/modal/modals/EditPassword.tsx
 #: components/modal/modals/EditEmail.tsx
 msgid "Enter your current password..."
+msgstr ""
+
+#: components/auth/src/flows/Form.tsx
+msgid "Enter your invite code."
 msgstr ""
 
 #: components/auth/src/flows/Form.tsx
@@ -1453,6 +1480,7 @@ msgstr "Позовите све ваше пријатеље, неке кул б�
 msgid "Invite Bot"
 msgstr ""
 
+#: components/auth/src/flows/Form.tsx
 #: components/app/interface/settings/server/invites/ListServerInvites.tsx
 msgid "Invite Code"
 msgstr "Позивни Код"
@@ -1816,6 +1844,10 @@ msgstr ""
 msgid "Mute Members"
 msgstr "Заглуши чланове"
 
+#: components/app/menus/UserContextMenu.tsx
+msgid "Mute Screen Share"
+msgstr ""
+
 #: components/app/menus/ServerContextMenu.tsx
 msgid "Mute Server"
 msgstr ""
@@ -1905,6 +1937,7 @@ msgstr ""
 
 #: components/app/menus/ServerContextMenu.tsx
 #: components/app/menus/shared/NotificationContextMenu.tsx
+#: components/app/interface/settings/UserSettings.tsx
 msgid "Notifications"
 msgstr "Обавештење"
 
@@ -2062,6 +2095,10 @@ msgstr "Молимо вас да изаберете метод за аутент
 msgid "Please select a reason"
 msgstr ""
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Powered by RNNoise"
+msgstr ""
+
 #: components/auth/src/AuthPage.tsx
 msgid "Privacy Policy"
 msgstr "Политика приватности"
@@ -2126,6 +2163,10 @@ msgstr ""
 
 #: components/app/interface/settings/user/Notifications.tsx
 msgid "Receive notifications while the app is open and in the background."
+msgstr ""
+
+#: components/app/interface/settings/user/Notifications.tsx
+msgid "Receive push notifications while the app is closed."
 msgstr ""
 
 #: components/ui/components/features/voice/callCard/VoiceCallCardStatus.tsx
@@ -2324,6 +2365,10 @@ msgstr "Сачуване Белешке"
 msgid "Scams or fraud"
 msgstr ""
 
+#: components/app/menus/UserContextMenu.tsx
+msgid "Screen Share Volume"
+msgstr ""
+
 #: components/modal/modals/AddBot.tsx
 msgid "Search for groups..."
 msgstr ""
@@ -2347,6 +2392,10 @@ msgstr ""
 
 #: components/modal/modals/CreateGroup.tsx
 msgid "Select members to add"
+msgstr ""
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Select noise suppression"
 msgstr ""
 
 #: components/app/interface/settings/user/Language.tsx

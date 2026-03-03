@@ -97,8 +97,8 @@ msgstr "{0} joined"
 msgid "{0} left"
 msgstr "{0} left"
 
-#. placeholder {0}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).from?.username
-#. placeholder {1}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).to?.username
+#. placeholder {0}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).from ?.username
+#. placeholder {1}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).to ?.username
 #: components/client/NotificationsWorker.tsx
 msgid "{0} made {1} the new group owner"
 msgstr "{0} made {1} the new group owner"
@@ -390,6 +390,10 @@ msgstr "Assign Roles"
 msgid "Authenticator App"
 msgstr "Authenticator App"
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Automatic Gain Control"
+msgstr "Automatic Gain Control"
+
 #: components/app/interface/settings/user/profile/UserProfileEditor.tsx
 msgid "Avatar"
 msgstr "Avatar"
@@ -465,12 +469,17 @@ msgid "Bot"
 msgstr "Bot"
 
 #: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Browser"
+msgstr "Browser"
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
 msgid "Browser Echo Cancellation"
 msgstr "Browser Echo Cancellation"
 
 #: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
-msgid "Browser Noise Supression"
-msgstr "Browser Noise Supression"
+#~ msgid "Browser Noise Supression"
+#~ msgstr "Browser Noise Supression"
 
 #: components/app/interface/settings/user/Feedback.tsx
 msgid "Bug Tracker"
@@ -1038,6 +1047,8 @@ msgstr "Disable Account"
 msgid "Disable one-time password authenticator"
 msgstr "Disable one-time password authenticator"
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
 #: components/app/interface/settings/server/Overview.tsx
 #: components/app/interface/settings/server/Overview.tsx
 #: components/app/interface/settings/server/Overview.tsx
@@ -1190,9 +1201,21 @@ msgstr "Enable authenticator app"
 msgid "Enable Desktop Notifications"
 msgstr "Enable Desktop Notifications"
 
+#: components/app/interface/settings/user/Notifications.tsx
+msgid "Enable Push Notifications"
+msgstr "Enable Push Notifications"
+
 #: components/app/interface/settings/user/appearance/AppearanceMenu.tsx
 msgid "Enable transparency glass/blur effects (slow on older machines)"
 msgstr "Enable transparency glass/blur effects (slow on older machines)"
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Enhanced"
+msgstr "Enhanced"
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Enhanced (RNNoise)"
+msgstr "Enhanced (RNNoise)"
 
 #: components/modal/modals/RenameSession.tsx
 msgid "Enter a new name for this session"
@@ -1220,6 +1243,10 @@ msgstr "Enter your current password."
 #: components/modal/modals/EditEmail.tsx
 msgid "Enter your current password..."
 msgstr "Enter your current password..."
+
+#: components/auth/src/flows/Form.tsx
+msgid "Enter your invite code."
+msgstr "Enter your invite code."
 
 #: components/auth/src/flows/Form.tsx
 msgid "Enter your preferred username."
@@ -1453,6 +1480,7 @@ msgstr "Invite all of your friends, some cool bots, and throw a big party."
 msgid "Invite Bot"
 msgstr "Invite Bot"
 
+#: components/auth/src/flows/Form.tsx
 #: components/app/interface/settings/server/invites/ListServerInvites.tsx
 msgid "Invite Code"
 msgstr "Invite Code"
@@ -1816,6 +1844,10 @@ msgstr "Mute lower-ranking members in voice call"
 msgid "Mute Members"
 msgstr "Mute Members"
 
+#: components/app/menus/UserContextMenu.tsx
+msgid "Mute Screen Share"
+msgstr "Mute Screen Share"
+
 #: components/app/menus/ServerContextMenu.tsx
 msgid "Mute Server"
 msgstr "Mute Server"
@@ -1905,6 +1937,7 @@ msgstr "Not of minimum age to use the platform"
 
 #: components/app/menus/ServerContextMenu.tsx
 #: components/app/menus/shared/NotificationContextMenu.tsx
+#: components/app/interface/settings/UserSettings.tsx
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -2062,6 +2095,10 @@ msgstr "Please select a method to authenticate your request."
 msgid "Please select a reason"
 msgstr "Please select a reason"
 
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Powered by RNNoise"
+msgstr "Powered by RNNoise"
+
 #: components/auth/src/AuthPage.tsx
 msgid "Privacy Policy"
 msgstr "Privacy Policy"
@@ -2127,6 +2164,10 @@ msgstr "Reason for report"
 #: components/app/interface/settings/user/Notifications.tsx
 msgid "Receive notifications while the app is open and in the background."
 msgstr "Receive notifications while the app is open and in the background."
+
+#: components/app/interface/settings/user/Notifications.tsx
+msgid "Receive push notifications while the app is closed."
+msgstr "Receive push notifications while the app is closed."
 
 #: components/ui/components/features/voice/callCard/VoiceCallCardStatus.tsx
 msgid "Reconnecting"
@@ -2324,6 +2365,10 @@ msgstr "Saved Notes"
 msgid "Scams or fraud"
 msgstr "Scams or fraud"
 
+#: components/app/menus/UserContextMenu.tsx
+msgid "Screen Share Volume"
+msgstr "Screen Share Volume"
+
 #: components/modal/modals/AddBot.tsx
 msgid "Search for groups..."
 msgstr "Search for groups..."
@@ -2348,6 +2393,10 @@ msgstr "Select audio output"
 #: components/modal/modals/CreateGroup.tsx
 msgid "Select members to add"
 msgstr "Select members to add"
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Select noise suppression"
+msgstr "Select noise suppression"
 
 #: components/app/interface/settings/user/Language.tsx
 msgid "Select your language"
