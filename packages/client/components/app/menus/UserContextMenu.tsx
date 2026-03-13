@@ -29,6 +29,7 @@ import MdReport from "@material-design-icons/svg/outlined/report.svg?component-s
 import MdChecked from "@material-symbols/svg-400/outlined/check_box.svg?component-solid";
 import MdUnchecked from "@material-symbols/svg-400/outlined/check_box_outline_blank.svg?component-solid";
 
+import { useVoice } from "@revolt/rtc";
 import {
   ContextMenu,
   ContextMenuButton,
@@ -45,6 +46,7 @@ export function UserContextMenu(props: {
   member?: ServerMember;
   contextMessage?: Message;
   inVoice?: boolean;
+  isScreenshare?: boolean;
 }) {
   // TODO: if we take serverId instead, we could dynamically fetch server member here
   // same for the floating menu I guess?
@@ -52,6 +54,7 @@ export function UserContextMenu(props: {
   const client = useClient();
   const navigate = useNavigate();
   const { openModal } = useModals();
+  const voice = useVoice();
 
   // server context
   const params = useSmartParams();
@@ -191,7 +194,7 @@ export function UserContextMenu(props: {
 
   return (
     <ContextMenu class="UserContextMenu">
-      <Show when={props.inVoice && !props.user.self}>
+      <Show when={props.inVoice && !props.user.self && !props.isScreenshare}>
         <ContextMenuButton
           onMouseDown={(e) => e.stopImmediatePropagation()}
           onClick={(e) => e.stopImmediatePropagation()}
@@ -226,6 +229,45 @@ export function UserContextMenu(props: {
           }
         >
           <Trans>Mute</Trans>
+        </ContextMenuButton>
+
+        <ContextMenuDivider />
+      </Show>
+      <Show when={props.isScreenshare && !props.user.self}>
+        <ContextMenuButton
+          onMouseDown={(e) => e.stopImmediatePropagation()}
+          onClick={(e) => e.stopImmediatePropagation()}
+        >
+          <Text class="label">
+            <Trans>Screen Share Volume</Trans>
+          </Text>
+          <Slider
+            min={0}
+            max={3}
+            step={0.1}
+            value={voice.getScreenshareVolume(props.user.id)}
+            onInput={(event) =>
+              voice.setScreenshareVolume(
+                props.user.id,
+                event.currentTarget.value,
+              )
+            }
+            labelFormatter={(label) => (label * 100).toFixed(0) + "%"}
+          />
+        </ContextMenuButton>
+        <ContextMenuButton
+          icon={MdMicOff}
+          onClick={() =>
+            voice.setScreenshareMuted(
+              props.user.id,
+              !voice.getScreenshareMuted(props.user.id),
+            )
+          }
+          actionSymbol={
+            voice.getScreenshareMuted(props.user.id) ? MdChecked : MdUnchecked
+          }
+        >
+          <Trans>Mute Screen Share</Trans>
         </ContextMenuButton>
 
         <ContextMenuDivider />
