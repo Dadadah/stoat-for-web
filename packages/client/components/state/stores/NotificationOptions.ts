@@ -37,6 +37,16 @@ export interface MuteState {
   until?: number;
 }
 
+/**
+ * Which objects in the TypeNotificationOptions that are comparable. Shortcut for the deep equals function.
+ */
+const NotificationComparableObjects: (keyof TypeNotificationOptions)[] = [
+  "channel",
+  "channel_mutes",
+  "server",
+  "server_mutes",
+];
+
 export interface TypeNotificationOptions {
   /**
    * Per-server settings
@@ -291,5 +301,33 @@ export class NotificationOptions extends AbstractStore<
   isChannelMuted(channel: Channel): boolean {
     const value = this.get().channel_mutes[channel.id];
     return !!value && (!value.until || value.until > this.#now());
+  }
+
+  /**
+   * Check whether other is equal to stored state.
+   * @param other The other notification object to compare against
+   * @returns Whether other notification object is equal to the stored notification object
+   */
+  equals(other: TypeNotificationOptions): boolean {
+    for (let compI = 0; compI < NotificationComparableObjects.length; compI++) {
+      const comparable = NotificationComparableObjects[compI];
+      const localComparableEntries = Object.entries(
+        this.get()[comparable] || {},
+      );
+      const otherComparable = other[comparable] || {};
+      if (
+        localComparableEntries.length !== Object.keys(otherComparable).length
+      ) {
+        return false;
+      }
+      for (let i = 0; i < localComparableEntries.length; i++) {
+        const entry = localComparableEntries[i];
+        if (entry[1] !== otherComparable[entry[0]]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 }

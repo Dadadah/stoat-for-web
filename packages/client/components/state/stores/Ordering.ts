@@ -103,4 +103,22 @@ export class Ordering extends AbstractStore<"ordering", TypeOrdering> {
         .sort((a, b) => +b.updatedAt - +a.updatedAt) ?? []
     );
   }
+
+  /**
+   * Check whether other is equal to stored state.
+   * @param other The other ordering object to compare against
+   * @returns Whether other ordering object is equal to stored ordering object
+   */
+  equals(other: TypeOrdering): boolean {
+    const localServers = this.get().servers;
+    if (localServers.length !== other.servers.length) {
+      return false;
+    }
+    for (let i = 0; i < localServers.length; i++) {
+      if (localServers[i] !== other.servers[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

@@ -6,6 +6,8 @@ import { Client } from "stoat.js";
 import { State } from "..";
 
 import { AbstractStore } from ".";
+import { TypeNotificationOptions } from "./NotificationOptions";
+import { TypeOrdering } from "./Ordering";
 
 type SynchronisedStores = "ordering" | "notifications";
 
@@ -163,15 +165,22 @@ export class Sync extends AbstractStore<"sync", TypeSynchronisation> {
     if (import.meta.env.DEV)
       console.info(`[sync] merge ${key} at ${ts} with`, data);
 
+    const parsed = this.state[key].clean(JSON.parse(data));
     if (ts > this.ts(key)) {
       // if ts is newer, hydrate the store with it
-      const parsed = this.state[key].clean(JSON.parse(data));
       this.set("revision", key, ts);
       this.#blockSync.add(key);
       this.state.set(key, parsed);
     } else if (ts !== this.ts(key)) {
-      // if ts is old, trigger write to synchronise to remote
-      this.touch(key);
+      // if ts is old, trigger write to synchronise to remote, but only if the data has been updated
+      if (
+        !this.state[key].equals(
+          // We can guarantee that parsed matches the type of this.state[key] due to the clean function call above
+          parsed as TypeOrdering & TypeNotificationOptions,
+        )
+      ) {
+        this.touch(key);
+      }
     }
   }
 
