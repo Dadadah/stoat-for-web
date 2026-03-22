@@ -97,8 +97,8 @@ msgstr ""
 msgid "{0} left"
 msgstr ""
 
-#. placeholder {0}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).from?.username
-#. placeholder {1}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).to?.username
+#. placeholder {0}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).from ?.username
+#. placeholder {1}: (message.systemMessage as ChannelOwnershipChangeSystemMessage).to ?.username
 #: components/client/NotificationsWorker.tsx
 msgid "{0} made {1} the new group owner"
 msgstr ""
@@ -389,6 +389,10 @@ msgstr "Դերեր նշանակել"
 #: components/app/interface/settings/user/Account.tsx
 msgid "Authenticator App"
 msgstr "Authenticator հավելված"
+
+#: components/app/interface/settings/user/voice/VoiceProcessingOptions.tsx
+msgid "Automatic Gain Control"
+msgstr ""
 
 #: components/app/interface/settings/user/profile/UserProfileEditor.tsx
 msgid "Avatar"
@@ -1205,6 +1209,10 @@ msgstr "Միացնել իսկորոշիչ հավելվածը"
 msgid "Enable Desktop Notifications"
 msgstr "Միացնել աշխատասեղանի ծանուցումները."
 
+#: components/app/interface/settings/user/Notifications.tsx
+msgid "Enable Push Notifications"
+msgstr ""
+
 #: components/app/interface/settings/user/appearance/AppearanceMenu.tsx
 msgid "Enable transparency glass/blur effects (slow on older machines)"
 msgstr ""
@@ -1844,6 +1852,10 @@ msgstr ""
 msgid "Mute Members"
 msgstr "Անդամների խլացում"
 
+#: components/app/menus/UserContextMenu.tsx
+msgid "Mute Screen Share"
+msgstr ""
+
 #: components/app/menus/ServerContextMenu.tsx
 msgid "Mute Server"
 msgstr ""
@@ -1933,6 +1945,7 @@ msgstr ""
 
 #: components/app/menus/ServerContextMenu.tsx
 #: components/app/menus/shared/NotificationContextMenu.tsx
+#: components/app/interface/settings/UserSettings.tsx
 msgid "Notifications"
 msgstr "Ծանուցումներ"
 
@@ -2160,6 +2173,10 @@ msgstr ""
 msgid "Receive notifications while the app is open and in the background."
 msgstr ""
 
+#: components/app/interface/settings/user/Notifications.tsx
+msgid "Receive push notifications while the app is closed."
+msgstr ""
+
 #: components/ui/components/features/voice/callCard/VoiceCallCardStatus.tsx
 msgid "Reconnecting"
 msgstr ""
@@ -2354,6 +2371,10 @@ msgstr "Պահված նշումներ"
 
 #: components/modal/modals/ReportContent.tsx
 msgid "Scams or fraud"
+msgstr ""
+
+#: components/app/menus/UserContextMenu.tsx
+msgid "Screen Share Volume"
 msgstr ""
 
 #: components/modal/modals/AddBot.tsx
