@@ -357,8 +357,7 @@ class Voice {
               this.getEnabledScreenShareQualities()[
                 this.#settings.screenShareQuality || "low"
               ]?.resolution,
-            // TODO: Change this to true when enabling screen share audio.
-            audio: false,
+            audio: true,
           },
         );
 
