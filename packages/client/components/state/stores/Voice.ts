@@ -37,6 +37,7 @@ export interface TypeVoice {
 
   screenShareQuality: ScreenShareQualityName;
   screenShareQualityAsk: boolean;
+  screenShareAudio: boolean;
 
   inputVolume: number;
   outputVolume: number;
@@ -79,6 +80,7 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
       autoGainControl: true,
       screenShareQuality: "low",
       screenShareQualityAsk: true,
+      screenShareAudio: true,
       inputVolume: 1.0,
       outputVolume: 1.0,
       deafen: false,
@@ -133,6 +135,10 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
 
     if (typeof input.screenShareQualityAsk === "boolean") {
       data.screenShareQualityAsk = input.screenShareQualityAsk;
+    }
+
+    if (typeof input.screenShareAudio === "boolean") {
+      data.screenShareAudio = input.screenShareAudio;
     }
 
     if (typeof input.inputVolume === "number") {
@@ -310,6 +316,13 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
   }
 
   /**
+   * Set screen share audio
+   */
+  set screenShareAudio(value: boolean) {
+    this.set("screenShareAudio", value);
+  }
+
+  /**
    * Set input volume
    */
   set inputVolume(value: number) {
@@ -384,6 +397,13 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
    */
   get screenShareQualityAsk(): boolean {
     return this.get().screenShareQualityAsk;
+  }
+
+  /**
+   * Get screen share audio
+   */
+  get screenShareAudio(): boolean {
+    return this.get().screenShareAudio;
   }
 
   /**
