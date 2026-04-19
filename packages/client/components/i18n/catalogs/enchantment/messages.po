@@ -2557,6 +2557,11 @@ msgstr ""
 msgid "Several people are typing…"
 msgstr "ᓭᒷ⍊ᒷ∷ᔑꖎ !¡ᒷ𝙹!¡ꖎᒷ ᔑ∷ᒷ ℸ||!¡╎リ⊣…"
 
+#: components/modal/modals/ScreenShareSettings.tsx
+#: components/modal/modals/ScreenSharePicker.tsx
+msgid "Share audio"
+msgstr ""
+
 #: components/app/interface/settings/channel/permissions/ChannelPermissionsEditor.tsx
 #: components/app/interface/settings/channel/permissions/ChannelPermissionsEditor.tsx
 msgid "Share camera or screen in voice call"
