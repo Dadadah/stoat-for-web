@@ -45,6 +45,9 @@ export interface TypeVoice {
 
   userVolumes: Record<string, number>;
   userMutes: Record<string, boolean>;
+
+  screenShareVolumes: Record<string, number>;
+  screenShareMutes: Record<string, boolean>;
 }
 
 /**
@@ -82,6 +85,8 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
       micOn: true,
       userVolumes: {},
       userMutes: {},
+      screenShareVolumes: {},
+      screenShareMutes: {},
     };
   }
 
@@ -163,6 +168,23 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
         .forEach(([k, v]) => (data.userMutes[k] = v));
     }
 
+    if (typeof input.screenShareVolumes === "object") {
+      Object.entries(input.screenShareVolumes)
+        .filter(
+          ([userId, volume]) =>
+            typeof userId === "string" && typeof volume === "number",
+        )
+        .forEach(([k, v]) => (data.userVolumes[k] = v));
+    }
+
+    if (typeof input.screenShareMutes === "object") {
+      Object.entries(input.screenShareMutes)
+        .filter(
+          ([userId, muted]) => typeof userId === "string" && muted === true,
+        )
+        .forEach(([k, v]) => (data.userMutes[k] = v));
+    }
+
     return data;
   }
 
@@ -200,6 +222,42 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
    */
   getUserMuted(userId: string): boolean {
     return this.get().userMutes[userId] || false;
+  }
+
+  /**
+   * Set a user's screen share volume
+   * @param userId User ID
+   * @param volume Volume
+   */
+  setScreenShareVolume(userId: string, volume: number) {
+    this.set("screenShareVolumes", userId, volume);
+  }
+
+  /**
+   * Get a user's screen share volume
+   * @param userId User ID
+   * @returns Volume or default
+   */
+  getScreenShareVolume(userId: string): number {
+    return this.get().screenShareVolumes[userId] || 1.0;
+  }
+
+  /**
+   * Set whether a user's screen share is muted
+   * @param userId User ID
+   * @param muted Whether they should be muted
+   */
+  setScreenShareMuted(userId: string, muted: boolean) {
+    this.set("screenShareMutes", userId, muted);
+  }
+
+  /**
+   * Get whether a user's screen share is muted
+   * @param userId User ID
+   * @returns Whether muted
+   */
+  getScreenShareMuted(userId: string): boolean {
+    return this.get().screenShareMutes[userId] || false;
   }
 
   /**
