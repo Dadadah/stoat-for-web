@@ -263,7 +263,7 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
    * @returns Whether muted
    */
   getScreenShareMuted(userId: string): boolean {
-    return this.get().screenShareMutes[userId] || false;
+    return this.get().screenShareMutes[userId] ?? true;
   }
 
   /**
