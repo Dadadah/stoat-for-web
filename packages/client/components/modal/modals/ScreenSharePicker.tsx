@@ -19,7 +19,7 @@ export function ScreenSharePickerModal(
     qualityName: createFormControl<ScreenShareQualityName>(
       voice.screenShareQuality || "low",
     ),
-    idx: createFormControl([0]),
+    idx: createFormControl([0], { required: true }),
   });
 
   async function onSubmit() {

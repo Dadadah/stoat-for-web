@@ -315,7 +315,8 @@ function FormVirtualSelect<K, T>(props: {
             onClick={() => {
               if (!props.multiple) {
                 props.control.setValue(
-                  props.control.value[0] === item.item.value
+                  props.control.value[0] === item.item.value &&
+                    !props.control.isRequired
                     ? []
                     : [item.item.value],
                 );
