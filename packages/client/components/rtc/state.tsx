@@ -328,7 +328,7 @@ class Voice {
       let screenPickerQualityName: ScreenShareQualityName | undefined;
 
       // Register the modal on screen picker handler if it exists
-      if (window.native) {
+      if (window.native && window.native.onceScreenPicker) {
         window.native.onceScreenPicker((sources) => {
           this.openModal({
             type: "screen_share_picker",
