@@ -79,6 +79,8 @@ export function MessageComposition(props: Props) {
 
   const isAlmostTooLong = () => messageLength() > maxMessageLength() - 200;
 
+  const wayTooLong = () => messageLength() > maxMessageLength() + 10000;
+
   // Whether the send button should be active/clickable
   const canSend = createMemo(() => {
     const draftContent = draft()?.content ?? "";
@@ -363,7 +365,9 @@ export function MessageComposition(props: Props) {
                 size="normal"
                 error={messageLength() > maxMessageLength()}
               >
-                {maxMessageLength() - messageLength()}
+                {wayTooLong()
+                  ? "Too Long"
+                  : maxMessageLength() - messageLength()}
               </MessageBox.FloatingAction>
             </Show>
             <MessageBox.ActionContainer>
