@@ -13,6 +13,20 @@ const NoiseSuppresionStates: NoiseSuppresionState[] = [
   "enhanced",
 ];
 
+/**
+ * Possible screen share qualities. Low is 720p@30fps, high 1080p@30fps and text is source@5fps.
+ */
+export type ScreenShareQualityName = "low" | "high" | "text";
+
+/**
+ * Array of available screen share quality names.
+ */
+export const ScreenShareQualityNames: ScreenShareQualityName[] = [
+  "low",
+  "high",
+  "text",
+];
+
 export interface TypeVoice {
   preferredAudioInputDevice?: string;
   preferredAudioOutputDevice?: string;
@@ -20,6 +34,9 @@ export interface TypeVoice {
   echoCancellation: boolean;
   noiseSupression: NoiseSuppresionState;
   autoGainControl: boolean;
+
+  screenShareQuality: ScreenShareQualityName;
+  screenShareQualityAsk: boolean;
 
   inputVolume: number;
   outputVolume: number;
@@ -57,6 +74,8 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
       echoCancellation: true,
       noiseSupression: "browser",
       autoGainControl: true,
+      screenShareQuality: "low",
+      screenShareQualityAsk: true,
       inputVolume: 1.0,
       outputVolume: 1.0,
       deafen: false,
@@ -98,6 +117,17 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
 
     if (typeof input.autoGainControl === "boolean") {
       data.autoGainControl = input.autoGainControl;
+    }
+
+    if (
+      input.screenShareQuality &&
+      ScreenShareQualityNames.includes(input.screenShareQuality)
+    ) {
+      data.screenShareQuality = input.screenShareQuality;
+    }
+
+    if (typeof input.screenShareQualityAsk === "boolean") {
+      data.screenShareQualityAsk = input.screenShareQualityAsk;
     }
 
     if (typeof input.inputVolume === "number") {
@@ -208,6 +238,20 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
   }
 
   /**
+   * Set screen share quality
+   */
+  set screenShareQuality(value: ScreenShareQualityName) {
+    this.set("screenShareQuality", value);
+  }
+
+  /**
+   * Set screen share quality always ask
+   */
+  set screenShareQualityAsk(value: boolean) {
+    this.set("screenShareQualityAsk", value);
+  }
+
+  /**
    * Set input volume
    */
   set inputVolume(value: number) {
@@ -268,6 +312,20 @@ export class Voice extends AbstractStore<"voice", TypeVoice> {
    */
   get autoGainControl(): boolean | undefined {
     return this.get().autoGainControl;
+  }
+
+  /**
+   * Get screen share quality
+   */
+  get screenShareQuality(): ScreenShareQualityName | undefined {
+    return this.get().screenShareQuality;
+  }
+
+  /**
+   * Get screen share quality always ask
+   */
+  get screenShareQualityAsk(): boolean {
+    return this.get().screenShareQualityAsk;
   }
 
   /**

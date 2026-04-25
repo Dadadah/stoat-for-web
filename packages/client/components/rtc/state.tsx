@@ -1,10 +1,10 @@
 import {
   Accessor,
-  JSX,
-  Setter,
   batch,
   createContext,
   createSignal,
+  JSX,
+  Setter,
   useContext,
 } from "solid-js";
 import {
@@ -13,14 +13,23 @@ import {
   useTracks,
 } from "solid-livekit-components";
 
-import { Room, Track } from "livekit-client";
+import {
+  Room,
+  ScreenSharePresets,
+  Track,
+  VideoResolution,
+} from "livekit-client";
 import { DenoiseTrackProcessor } from "livekit-rnnoise-processor";
 import { Channel } from "stoat.js";
 
+import { useClient } from "@revolt/client";
 import { CONFIGURATION } from "@revolt/common";
 import { ModalController, useModals } from "@revolt/modal";
 import { useState } from "@revolt/state";
-import { Voice as VoiceSettings } from "@revolt/state/stores/Voice";
+import {
+  ScreenShareQualityName,
+  Voice as VoiceSettings,
+} from "@revolt/state/stores/Voice";
 import { VoiceCallCardContext } from "@revolt/ui/components/features/voice/callCard/VoiceCallCard";
 
 import { InRoom } from "./components/InRoom";
@@ -32,6 +41,13 @@ type State =
   | "CONNECTING"
   | "CONNECTED"
   | "RECONNECTING";
+
+type ScreenShareQuality = {
+  name: ScreenShareQualityName;
+  resolution: VideoResolution;
+  fullName: string;
+  contentHint: string;
+};
 
 class Voice {
   #settings: VoiceSettings;
@@ -66,6 +82,7 @@ class Voice {
   #setShowBar: Setter<boolean>;
 
   private openModal;
+  private getClient;
 
   constructor(voiceSettings: VoiceSettings, modals: ModalController) {
     this.#settings = voiceSettings;
@@ -108,6 +125,8 @@ class Voice {
     this.#setShowBar = setShowBar;
 
     this.openModal = modals.openModal;
+
+    this.getClient = useClient();
   }
 
   async connect(channel: Channel, auth?: { url: string; token: string }) {
@@ -221,17 +240,159 @@ class Voice {
     }
   }
 
+  /**
+   * Get the enabled screen share qualities. "low" will always be enabled.
+   * Each screen share quality is checked against the limit if the limit is available on the client.
+   *
+   * TODO: Translate the fullNames here, I can't figure out how to do it.
+   *
+   * @param name The name of the screen share quality to get
+   * @returns A partial record of ScreenShareQualityName to ScreenShareQuality. Will always contain "low" quality.
+   */
+  getEnabledScreenShareQualities(): Partial<
+    Record<ScreenShareQualityName, ScreenShareQuality>
+  > {
+    // Always enable low
+    const qualities: Partial<
+      Record<ScreenShareQualityName, ScreenShareQuality>
+    > = {
+      low: {
+        name: "low",
+        resolution: ScreenSharePresets.h720fps30.resolution,
+        fullName: `720p 30FPS`,
+        contentHint: "motion",
+      },
+    };
+
+    if (this.getClient().configured()) {
+      // TODO: Use new user limits if the user is new - I don't think there's a way to do that now?
+      const limit =
+        this.getClient().configuration?.features.limits.default
+          .video_resolution;
+
+      // TODO: Add more resolutions to stream from if they're enabled. May tie into premium users in the future?
+      if (limit) {
+        if (
+          (limit[0] === 0 || limit[0] >= 1920) &&
+          (limit[1] === 0 || limit[1] >= 1080)
+        ) {
+          qualities.high = {
+            name: "high",
+            resolution: ScreenSharePresets.h1080fps30.resolution,
+            fullName: `1080p 30FPS`,
+            contentHint: "motion",
+          };
+          const originalResolution = ScreenSharePresets.original.resolution;
+          originalResolution.frameRate = 5;
+          originalResolution.aspectRatio = 0;
+          if (this.getClient().configured()) {
+            // TODO: Use new user limits if the user is new - I don't think there's a way to do that now?
+            const limit =
+              this.getClient().configuration?.features.limits.default
+                .video_resolution;
+            if (limit) {
+              originalResolution.width = limit[0];
+              originalResolution.height = limit[1];
+              // If both resolutions are limited, set aspect ratio
+              if (
+                originalResolution.height !== 0 &&
+                originalResolution.width !== 0
+              ) {
+                originalResolution.aspectRatio =
+                  originalResolution.width / originalResolution.height;
+              }
+            }
+          }
+          qualities.text = {
+            name: "text",
+            resolution: originalResolution,
+            fullName: `Source 5FPS`,
+            contentHint: "text",
+          };
+        }
+      }
+    }
+    return qualities;
+  }
+
   async toggleScreenshare() {
-    try {
-      const room = this.room();
-      if (!room) throw "invalid state";
-      await room.localParticipant.setScreenShareEnabled(
-        !room.localParticipant.isScreenShareEnabled,
-      );
+    const room = this.room();
+    if (!room) throw "invalid state";
+    if (this.screenshare()) {
+      await room.localParticipant.setScreenShareEnabled(false);
 
       this.#setScreenshare(room.localParticipant.isScreenShareEnabled);
-    } catch (e) {
-      this.onErr(e);
+    } else {
+      const qualities = this.getEnabledScreenShareQualities();
+      try {
+        const localTrack = await room.localParticipant.setScreenShareEnabled(
+          true,
+          {
+            resolution:
+              this.getEnabledScreenShareQualities()[
+                this.#settings.screenShareQuality || "low"
+              ]?.resolution,
+            // TODO: Change this to true when enabling screen share audio.
+            audio: false,
+          },
+        );
+
+        this.#setScreenshare(room.localParticipant.isScreenShareEnabled);
+
+        if (localTrack) {
+          const callback = async (qualityName: ScreenShareQualityName) => {
+            const quality = qualities[qualityName] || qualities.low!;
+
+            if (localTrack.videoTrack) {
+              await localTrack.videoTrack.mediaStreamTrack.applyConstraints({
+                frameRate: { max: quality.resolution.frameRate },
+                width:
+                  quality.resolution.width === 0
+                    ? undefined
+                    : { max: quality.resolution.width },
+                height:
+                  quality.resolution.width === 0
+                    ? undefined
+                    : { max: quality.resolution.height },
+              });
+              localTrack.videoTrack.mediaStreamTrack.contentHint =
+                quality.contentHint;
+            }
+          };
+
+          if (this.#settings.screenShareQualityAsk) {
+            if (Object.keys(qualities).length > 1) {
+              localTrack.pauseUpstream();
+              this.openModal({
+                onCancel: async () => {
+                  await room.localParticipant.setScreenShareEnabled(false);
+                  this.#setScreenshare(
+                    room.localParticipant.isScreenShareEnabled,
+                  );
+                },
+                type: "screen_share_settings",
+                trackReference: {
+                  participant: room.localParticipant,
+                  publication: localTrack,
+                  source: Track.Source.ScreenShare,
+                },
+                qualities: Object.keys(qualities).map((k) => {
+                  const v = qualities[k as ScreenShareQualityName]!;
+                  return { name: k, fullName: v.fullName };
+                }),
+                callback: async (qualityName) => {
+                  callback(qualityName);
+                  localTrack.resumeUpstream();
+                },
+              });
+            } else {
+              callback(this.#settings.screenShareQuality || "low");
+            }
+          }
+        }
+      } catch (e) {
+        this.onErr(e);
+      }
     }
   }
 
