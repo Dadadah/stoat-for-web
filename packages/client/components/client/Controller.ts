@@ -121,9 +121,7 @@ class Lifecycle {
 
   private dispose() {
     if (this.client) {
-      this.client.events.removeAllListeners();
-      this.client.removeAllListeners();
-      this.client.events.disconnect();
+      this.client.logout();
     }
 
     this.client = new Client({
@@ -157,6 +155,8 @@ class Lifecycle {
           enabled: false,
           nodes: [],
         },
+        legal_links: {} as never,
+        limits: {} as never,
       },
       vapid: String(),
       ws: CONFIGURATION.DEFAULT_WS_URL,
@@ -597,7 +597,7 @@ export default class ClientController {
 
   logout() {
     this.state.settings.resetNotificationsState();
-    killServiceWorkerSubscription(this.getCurrentClient());
+    killServiceWorkerSubscription(this.getCurrentClient(), true);
     this.state.auth.removeSession();
     this.lifecycle.transition({
       type: TransitionType.Logout,
