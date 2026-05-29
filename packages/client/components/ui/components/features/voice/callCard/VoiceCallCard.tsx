@@ -243,16 +243,18 @@ function VoiceCallCard(props: { channel: Channel }) {
   });
 
   return (
-    <Base>
-      <Card ref={viewRef} active={inCall()}>
-        <Show
-          when={inCall()}
-          fallback={<VoiceCallCardPreview channel={props.channel} />}
-        >
-          <VoiceCallCardActiveRoom />
-        </Show>
-      </Card>
-    </Base>
+    <Show when={voice.showCard(props.channel)}>
+      <Base>
+        <Card ref={viewRef} active={inCall()}>
+          <Show
+            when={inCall()}
+            fallback={<VoiceCallCardPreview channel={props.channel} />}
+          >
+            <VoiceCallCardActiveRoom />
+          </Show>
+        </Card>
+      </Base>
+    </Show>
   );
 }
 

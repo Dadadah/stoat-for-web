@@ -1,3 +1,4 @@
+import { createCountdownFromNow } from "@solid-primitives/date";
 import {
   For,
   Match,
@@ -13,6 +14,8 @@ import {
 import { useLingui } from "@lingui-solid/solid/macro";
 import { Channel } from "stoat.js";
 
+import { styled } from "styled-system/jsx";
+
 import { useClient } from "@revolt/client";
 import { CONFIGURATION, debounce } from "@revolt/common";
 import { Keybind, KeybindAction, createKeybind } from "@revolt/keybinds";
@@ -26,10 +29,12 @@ import {
   IconButton,
   MessageBox,
   MessageReplyPreview,
+  Tooltip,
   humanFileSize,
 } from "@revolt/ui";
 import { Symbol } from "@revolt/ui/components/utils/Symbol";
 import { useSearchSpace } from "@revolt/ui/components/utils/autoComplete";
+import { UserSlowmodes } from "stoat.js/lib/events/v1";
 
 interface Props {
   /**
@@ -51,6 +56,70 @@ export function MessageComposition(props: Props) {
   const { t } = useLingui();
   const client = useClient();
   const { openModal } = useModals();
+
+  const currentSlowmode = (): UserSlowmodes | undefined => {
+    return client().userSlowmodes.get(props.channel.id);
+  };
+  const countdownForEntry = createMemo(() => {
+    const entry = currentSlowmode();
+    if (!entry) return;
+    const receivedAt = entry.receivedAt ?? Date.now();
+    const targetTs = receivedAt + entry.retry_after * 1000;
+    return createCountdownFromNow(targetTs);
+  });
+
+  const isSlowmodeExempt = (): boolean => {
+    return props.channel.havePermission("BypassSlowmode");
+  };
+
+  const cooldownRemaining = createMemo(() => {
+    if (!props.channel.slowmode || isSlowmodeExempt()) return 0;
+
+    const cd = countdownForEntry();
+    if (!cd) return 0;
+
+    const [store] = cd;
+
+    const h = store.hours ?? 0;
+    const m = store.minutes ?? 0;
+    const s = store.seconds ?? 0;
+
+    const totalSeconds = h * 3600 + m * 60 + s;
+    return totalSeconds > 0 ? totalSeconds : 0;
+  });
+
+  const slowmodeText = createMemo(() => {
+    const s = cooldownRemaining();
+    if (!s) return "";
+
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+
+    if (h > 0) {
+      return `${h}:${m.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+    }
+    return `${m}:${sec.toString().padStart(2, "0")}`;
+  });
+
+  const slowmodeWaitTime = createMemo(() => {
+    const s = props.channel.slowmode;
+    if (!s) return "";
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+
+    if (h > 0 && m === 0 && sec === 0)
+      return h === 1 ? t`1 hour` : t`${h} hours`;
+    if (m > 0 && sec === 0 && h === 0)
+      return m === 1 ? t`1 minute` : t`${m} minutes`;
+
+    const parts = [];
+    if (h > 0) parts.push(h === 1 ? t`1 hour` : t`${h} hours`);
+    if (m > 0) parts.push(m === 1 ? t`1 minute` : t`${m} minutes`);
+    if (sec > 0) parts.push(sec === 1 ? t`1 second` : t`${sec} seconds`);
+    return parts.join(" ");
+  });
 
   createKeybind(KeybindAction.CHAT_JUMP_END, () =>
     setNodeReplacement(["_focus"]),
@@ -88,8 +157,12 @@ export function MessageComposition(props: Props) {
 
     const tooLong = messageLength() > maxMessageLength();
 
+    const isSlowmode = currentSlowmode();
+
     return (
-      !tooLong && (draftContent.trim().length > 0 || draftFiles.length > 0)
+      !tooLong &&
+      (draftContent.trim().length > 0 || draftFiles.length > 0) &&
+      !isSlowmode
     );
   });
 
@@ -178,6 +251,8 @@ export function MessageComposition(props: Props) {
    */
   async function sendMessage(useContent?: unknown) {
     if (!canSend() && typeof useContent !== "string") {
+      return;
+    } else if (currentSlowmode()) {
       return;
     }
     stopTyping();
@@ -344,6 +419,24 @@ export function MessageComposition(props: Props) {
           );
         }}
       </For>
+      <Show when={props.channel.slowmode}>
+        <SlowmodeContainer>
+          <Tooltip
+            content={t`Members can send one message every ${slowmodeWaitTime()}.`}
+            placement="top"
+          >
+            <SlowmodeRow>
+              <Symbol style={{ "font-size": "1rem" }}>schedule</Symbol>
+              <SlowmodeText>
+                <Switch fallback={t`Slowmode is enabled.`}>
+                  <Match when={isSlowmodeExempt()}>{t`Slowmode Immune`}</Match>
+                  <Match when={cooldownRemaining() > 0}>{slowmodeText()}</Match>
+                </Switch>
+              </SlowmodeText>
+            </SlowmodeRow>
+          </Tooltip>
+        </SlowmodeContainer>
+      </Show>
       <MessageBox
         initialValue={initialValue()}
         nodeReplacement={nodeReplacement()}
@@ -435,3 +528,26 @@ export function MessageComposition(props: Props) {
     </>
   );
 }
+
+const SlowmodeContainer = styled("div", {
+  base: {
+    display: "flex",
+    justifyContent: "flex-end",
+    padding: "0 12px 6px 0",
+  },
+});
+
+const SlowmodeRow = styled("div", {
+  base: {
+    display: "flex",
+    alignItems: "center",
+    gap: "var(--gap-sm)",
+  },
+});
+
+const SlowmodeText = styled("span", {
+  base: {
+    fontSize: "0.75rem",
+    fontWeight: "600",
+  },
+});
