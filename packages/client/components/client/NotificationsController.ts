@@ -173,7 +173,10 @@ function arrayBufferToBase64URL(buffer: ArrayBuffer): string {
 }
 
 /** Exported for the client controller. Don't use this unless you have to. */
-export async function killServiceWorkerSubscription(client: Client) {
+export async function killServiceWorkerSubscription(
+  client: Client,
+  loggingOut?: boolean,
+) {
   if (IS_DEV) {
     console.log("Skipping killing push worker in dev.");
     return;
@@ -183,6 +186,6 @@ export async function killServiceWorkerSubscription(client: Client) {
   if (!registration) return;
   const subscription = await registration.pushManager.getSubscription();
   if (await subscription?.unsubscribe()) {
-    await client.api.post("/push/unsubscribe");
+    if (!loggingOut) await client.api.post("/push/unsubscribe");
   }
 }
